@@ -53,234 +53,94 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600">Selamat datang di sistem arsip bimbingan konseling</p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-300 p-4 md:p-8">
+      <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-extrabold text-gray-900 flex items-center gap-3">
+            <span>Dashboard</span>
+            <span className="inline-block bg-blue-200 p-2 rounded-full">
+              <svg width="32" height="32" fill="none" viewBox="0 0 24 24"><rect width="24" height="24" rx="12" fill="#2563eb"/><path d="M12 13a4 4 0 100-8 4 4 0 000 8zM4 20a8 8 0 1116 0H4z" fill="#fff"/></svg>
+            </span>
+          </h1>
+          <p className="text-gray-600 mt-1">Selamat datang di sistem arsip bimbingan konseling</p>
+        </div>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <Users className="h-6 w-6 text-gray-400" />
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Total Siswa
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    {stats.totalStudents}
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-          <div className="bg-gray-50 px-5 py-3">
-            <div className="text-sm">
-              <Link
-                to="/students"
-                className="font-medium text-primary-700 hover:text-primary-900"
-              >
-                Lihat semua siswa
-              </Link>
-            </div>
+        <div className="bg-gradient-to-br from-blue-400 to-blue-600 text-white shadow-lg rounded-2xl p-6 flex items-center gap-4 hover:scale-105 transition-transform">
+          <Users className="h-12 w-12 opacity-80" />
+          <div>
+            <div className="text-lg font-bold">{stats.totalStudents}</div>
+            <div className="text-sm opacity-90">Total Siswa</div>
           </div>
         </div>
-
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <FileText className="h-6 w-6 text-gray-400" />
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Total Rekaman
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    {stats.totalRecords}
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-          <div className="bg-gray-50 px-5 py-3">
-            <div className="text-sm">
-              <Link
-                to="/counseling-records"
-                className="font-medium text-primary-700 hover:text-primary-900"
-              >
-                Lihat semua rekaman
-              </Link>
-            </div>
+        <div className="bg-gradient-to-br from-green-400 to-green-600 text-white shadow-lg rounded-2xl p-6 flex items-center gap-4 hover:scale-105 transition-transform">
+          <FileText className="h-12 w-12 opacity-80" />
+          <div>
+            <div className="text-lg font-bold">{stats.totalRecords}</div>
+            <div className="text-sm opacity-90">Total Rekaman</div>
           </div>
         </div>
-
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <BookOpen className="h-6 w-6 text-gray-400" />
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Total Layanan
-                  </dt>
-                  <dd className="text-lg font-medium text-gray-900">
-                    {stats.totalServices}
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-          <div className="bg-gray-50 px-5 py-3">
-            <div className="text-sm">
-              <Link
-                to="/services"
-                className="font-medium text-primary-700 hover:text-primary-900"
-              >
-                Lihat semua layanan
-              </Link>
-            </div>
+        <div className="bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-lg rounded-2xl p-6 flex items-center gap-4 hover:scale-105 transition-transform">
+          <BookOpen className="h-12 w-12 opacity-80" />
+          <div>
+            <div className="text-lg font-bold">{stats.totalServices}</div>
+            <div className="text-sm opacity-90">Total Layanan</div>
           </div>
         </div>
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white shadow rounded-lg mb-8">
-        <div className="px-4 py-5 sm:p-6">
-          <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-            Aksi Cepat
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Link
-              to="/counseling-records"
-              className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 border border-gray-200 rounded-lg hover:border-primary-300"
-            >
-              <div>
-                <span className="rounded-lg inline-flex p-3 bg-primary-50 text-primary-700 ring-4 ring-white">
-                  <Plus className="h-6 w-6" />
-                </span>
-              </div>
-              <div className="mt-8">
-                <h3 className="text-lg font-medium">
-                  <span className="absolute inset-0" aria-hidden="true" />
-                  Tambah Rekaman
-                </h3>
-                <p className="mt-2 text-sm text-gray-500">
-                  Buat rekaman kegiatan konseling baru
-                </p>
-              </div>
-            </Link>
-
-            <Link
-              to="/students"
-              className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 border border-gray-200 rounded-lg hover:border-primary-300"
-            >
-              <div>
-                <span className="rounded-lg inline-flex p-3 bg-primary-50 text-primary-700 ring-4 ring-white">
-                  <Users className="h-6 w-6" />
-                </span>
-              </div>
-              <div className="mt-8">
-                <h3 className="text-lg font-medium">
-                  <span className="absolute inset-0" aria-hidden="true" />
-                  Kelola Siswa
-                </h3>
-                <p className="mt-2 text-sm text-gray-500">
-                  Tambah atau edit data siswa
-                </p>
-              </div>
-            </Link>
-
-            <Link
-              to="/services"
-              className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 border border-gray-200 rounded-lg hover:border-primary-300"
-            >
-              <div>
-                <span className="rounded-lg inline-flex p-3 bg-primary-50 text-primary-700 ring-4 ring-white">
-                  <BookOpen className="h-6 w-6" />
-                </span>
-              </div>
-              <div className="mt-8">
-                <h3 className="text-lg font-medium">
-                  <span className="absolute inset-0" aria-hidden="true" />
-                  Kelola Layanan
-                </h3>
-                <p className="mt-2 text-sm text-gray-500">
-                  Tambah atau edit layanan konseling
-                </p>
-              </div>
-            </Link>
-          </div>
+      <div className="bg-white/90 shadow rounded-2xl mb-8 p-6">
+        <h3 className="text-lg font-bold text-gray-900 mb-4">Aksi Cepat</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Link
+            to="/counseling-records"
+            className="group bg-blue-100 hover:bg-blue-200 p-6 border border-blue-200 rounded-xl flex flex-col items-center transition"
+          >
+            <Plus className="h-8 w-8 text-blue-600 mb-2" />
+            <span className="font-semibold text-blue-700">Tambah Rekaman</span>
+            <span className="text-xs text-blue-500 mt-1">Buat rekaman kegiatan konseling baru</span>
+          </Link>
+          <Link
+            to="/students"
+            className="group bg-green-100 hover:bg-green-200 p-6 border border-green-200 rounded-xl flex flex-col items-center transition"
+          >
+            <Users className="h-8 w-8 text-green-600 mb-2" />
+            <span className="font-semibold text-green-700">Kelola Siswa</span>
+            <span className="text-xs text-green-500 mt-1">Tambah atau edit data siswa</span>
+          </Link>
+          <Link
+            to="/services"
+            className="group bg-yellow-100 hover:bg-yellow-200 p-6 border border-yellow-200 rounded-xl flex flex-col items-center transition"
+          >
+            <BookOpen className="h-8 w-8 text-yellow-600 mb-2" />
+            <span className="font-semibold text-yellow-700">Kelola Layanan</span>
+            <span className="text-xs text-yellow-500 mt-1">Tambah atau edit layanan</span>
+          </Link>
         </div>
       </div>
 
       {/* Recent Records */}
-      <div className="bg-white shadow rounded-lg">
-        <div className="px-4 py-5 sm:p-6">
-          <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-            Rekaman Terbaru
-          </h3>
-          {stats.recentRecords.length > 0 ? (
-            <div className="overflow-hidden">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Tanggal
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Siswa
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Kegiatan
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Layanan
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {stats.recentRecords.map((record) => (
-                    <tr key={record.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {new Date(record.date).toLocaleDateString('id-ID')}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {record.student_name}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {record.activity}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {record.service_name}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <p className="text-gray-500 text-center py-4">
-              Belum ada rekaman konseling
-            </p>
-          )}
-          <div className="mt-4">
-            <Link
-              to="/counseling-records"
-              className="text-sm font-medium text-primary-700 hover:text-primary-900"
-            >
-              Lihat semua rekaman →
-            </Link>
-          </div>
-        </div>
+      <div className="bg-white/90 shadow rounded-2xl p-6">
+        <h3 className="text-lg font-bold text-gray-900 mb-4">Rekaman Terbaru</h3>
+        {stats.recentRecords.length === 0 ? (
+          <div className="text-gray-500 text-center py-8">Belum ada rekaman</div>
+        ) : (
+          <ul className="divide-y divide-gray-200">
+            {stats.recentRecords.map((rec: any, idx: number) => (
+              <li key={rec.id || idx} className="py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                <div>
+                  <div className="font-semibold text-blue-700">{rec.activity}</div>
+                  <div className="text-xs text-gray-500">{rec.date} &bull; {rec.student_name}</div>
+                  <div className="text-xs text-gray-400">{rec.location} &bull; {rec.description}</div>
+                </div>
+                <Link to="/counseling-records" className="text-xs text-blue-600 hover:underline">Lihat Detail</Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

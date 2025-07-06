@@ -86,6 +86,21 @@ function initializeDatabase() {
     const defaultPassword = bcrypt.hashSync('admin123', 10);
     db.run(`INSERT OR IGNORE INTO users (email, password, name) VALUES (?, ?, ?)`, 
       ['admin@school.com', defaultPassword, 'Administrator']);
+
+    // Insert sample students
+    db.run(`INSERT OR IGNORE INTO students (nis, name, grade, major, room) VALUES (?, ?, ?, ?, ?)`,
+      ['1234567890', 'Ibnu Syina', '12', 'TKJ', '1']);
+    db.run(`INSERT OR IGNORE INTO students (nis, name, grade, major, room) VALUES (?, ?, ?, ?, ?)`,
+      ['9876543211', 'Raga Paramarta', '10', 'TBSM', '2']);
+
+    // Insert sample services (layanan utama)
+    db.run(`INSERT OR IGNORE INTO services (id, name, parent_id) VALUES (?, ?, NULL)`, [1, 'Bimbingan Klasikal']);
+    db.run(`INSERT OR IGNORE INTO services (id, name, parent_id) VALUES (?, ?, NULL)`, [2, 'Layanan Orientasi']);
+    db.run(`INSERT OR IGNORE INTO services (id, name, parent_id) VALUES (?, ?, NULL)`, [3, 'Layanan Informasi']);
+    db.run(`INSERT OR IGNORE INTO services (id, name, parent_id) VALUES (?, ?, NULL)`, [4, 'Bimbingan Kelompok']);
+    // Insert sample sub-services
+    db.run(`INSERT OR IGNORE INTO services (name, parent_id) VALUES (?, ?)`, ['Konseling Individual', 1]);
+    db.run(`INSERT OR IGNORE INTO services (name, parent_id) VALUES (?, ?)`, ['Konseling Kelompok', 1]);
   });
 }
 
