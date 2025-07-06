@@ -114,29 +114,26 @@ const Students: React.FC = () => {
 
   return (
     <div>
-      <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Data Siswa</h1>
-          <p className="text-gray-600">Kelola data siswa bimbingan konseling</p>
-        </div>
+      {/* Header & Tambah Siswa */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+        <h1 className="text-xl font-bold mb-2 sm:mb-0">Data Siswa</h1>
         <button
           onClick={openAddModal}
-          className="mt-4 sm:mt-0 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow flex items-center"
         >
-          <Plus className="h-4 w-4 mr-2" />
-          Tambah Siswa
+          <Plus className="h-5 w-5 mr-2" /> Tambah Siswa
         </button>
       </div>
 
       {/* Search */}
-      <div className="mb-6">
-        <div className="relative">
+      <div className="mb-6 flex justify-end">
+        <div className="relative w-full sm:w-80">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Search className="h-5 w-5 text-gray-400" />
           </div>
           <input
             type="text"
-            placeholder="Cari siswa berdasarkan nama atau NIS..."
+            placeholder="Cari siswa..."
             className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -146,68 +143,46 @@ const Students: React.FC = () => {
 
       {/* Students Table */}
       <div className="bg-white shadow overflow-hidden sm:rounded-md">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full border border-gray-300">
+          <thead className="bg-gray-100">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                NIS
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Nama
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Tingkat
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Jurusan
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Ruangan
-              </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Aksi
-              </th>
+              <th className="border px-4 py-2 text-xs font-bold text-gray-700">No</th>
+              <th className="border px-4 py-2 text-xs font-bold text-gray-700">NIS</th>
+              <th className="border px-4 py-2 text-xs font-bold text-gray-700">Nama</th>
+              <th className="border px-4 py-2 text-xs font-bold text-gray-700">Tingkat</th>
+              <th className="border px-4 py-2 text-xs font-bold text-gray-700">Jurusan</th>
+              <th className="border px-4 py-2 text-xs font-bold text-gray-700">Ruangan</th>
+              <th className="border px-4 py-2 text-xs font-bold text-gray-700">Aksi</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {students.map((student) => (
-              <tr key={student.id}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {student.nis}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {student.name}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {student.grade}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {student.major}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {student.room}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <div className="flex justify-end space-x-2">
-                    <button
-                      onClick={() => setViewingStudent(student)}
-                      className="text-primary-600 hover:text-primary-900"
-                    >
-                      <Eye className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => handleEdit(student)}
-                      className="text-indigo-600 hover:text-indigo-900"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(student.id)}
-                      className="text-red-600 hover:text-red-900"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
+          <tbody>
+            {students.map((student, idx) => (
+              <tr key={student.id} className="hover:bg-gray-50">
+                <td className="border px-4 py-2 text-sm text-center">{idx + 1}</td>
+                <td className="border px-4 py-2 text-sm">{student.nis}</td>
+                <td className="border px-4 py-2 text-sm">{student.name}</td>
+                <td className="border px-4 py-2 text-sm">{student.grade}</td>
+                <td className="border px-4 py-2 text-sm">{student.major}</td>
+                <td className="border px-4 py-2 text-sm">{student.room}</td>
+                <td className="border px-4 py-2 text-sm text-center">
+                  <button
+                    onClick={() => setViewingStudent(student)}
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs mr-1"
+                  >
+                    View
+                  </button>
+                  <button
+                    onClick={() => handleEdit(student)}
+                    className="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs mr-1"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(student.id)}
+                    className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs"
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
