@@ -24,10 +24,16 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md bg-white p-8 rounded shadow">
-        <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-200 via-white to-blue-400">
+      <div className="w-full max-w-md bg-white/90 p-10 rounded-3xl shadow-2xl flex flex-col items-center">
+        <div className="mb-6 flex flex-col items-center">
+          <div className="bg-blue-100 rounded-full p-4 mb-3 shadow">
+            <svg width="56" height="56" fill="none" viewBox="0 0 24 24"><rect width="24" height="24" rx="12" fill="#2563eb"/><path d="M12 13a4 4 0 100-8 4 4 0 000 8zM4 20a8 8 0 1116 0H4z" fill="#fff"/></svg>
+          </div>
+          <h2 className="text-3xl font-extrabold text-gray-900 mb-1">Selamat Datang!</h2>
+          <p className="text-gray-500 text-center text-sm">Silakan login untuk mengakses Arsip Bimbingan Konseling</p>
+        </div>
+        <form onSubmit={handleSubmit} className="space-y-4 w-full">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
               E-Mail Address
@@ -38,7 +44,7 @@ const Login: React.FC = () => {
               type="email"
               autoComplete="email"
               required
-              className="block w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 bg-yellow-100 placeholder-gray-400"
+              className="block w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 bg-yellow-100 placeholder-gray-400 transition"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -53,7 +59,7 @@ const Login: React.FC = () => {
               type={showPassword ? 'text' : 'password'}
               autoComplete="current-password"
               required
-              className="block w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 bg-yellow-100 placeholder-gray-400"
+              className="block w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 bg-yellow-100 placeholder-gray-400 transition"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -76,7 +82,7 @@ const Login: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-32"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 w-32 shadow transition-all duration-150"
             >
               {isLoading ? 'Memproses...' : 'Login'}
             </button>
