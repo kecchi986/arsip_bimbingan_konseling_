@@ -226,29 +226,26 @@ const CounselingRecords: React.FC = () => {
 
   return (
     <div>
-      <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Rekaman Konseling</h1>
-          <p className="text-gray-600">Kelola rekaman kegiatan konseling</p>
-        </div>
+      {/* Header & Tambah Bimbingan */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+        <h1 className="text-xl font-bold mb-2 sm:mb-0">Bimbingan</h1>
         <button
           onClick={openAddModal}
-          className="mt-4 sm:mt-0 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow flex items-center"
         >
-          <Plus className="h-4 w-4 mr-2" />
-          Tambah Rekaman
+          <Plus className="h-5 w-5 mr-2" /> Tambah Bimbingan
         </button>
       </div>
 
       {/* Search */}
-      <div className="mb-6">
-        <div className="relative">
+      <div className="mb-6 flex justify-end">
+        <div className="relative w-full sm:w-80">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Search className="h-5 w-5 text-gray-400" />
           </div>
           <input
             type="text"
-            placeholder="Cari rekaman berdasarkan nama siswa, kegiatan, atau uraian..."
+            placeholder="Cari rekaman..."
             className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -258,80 +255,48 @@ const CounselingRecords: React.FC = () => {
 
       {/* Records Table */}
       <div className="bg-white shadow overflow-hidden sm:rounded-md">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full border border-gray-300">
+          <thead className="bg-gray-100">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Tanggal
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Siswa
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Kegiatan
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Tempat
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Layanan
-              </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Aksi
-              </th>
+              <th className="border px-4 py-2 text-xs font-bold text-gray-700">No</th>
+              <th className="border px-4 py-2 text-xs font-bold text-gray-700">Tanggal</th>
+              <th className="border px-4 py-2 text-xs font-bold text-gray-700">Kegiatan</th>
+              <th className="border px-4 py-2 text-xs font-bold text-gray-700">Tempat</th>
+              <th className="border px-4 py-2 text-xs font-bold text-gray-700">Uraian</th>
+              <th className="border px-4 py-2 text-xs font-bold text-gray-700">Keterangan</th>
+              <th className="border px-4 py-2 text-xs font-bold text-gray-700">Siswa yang bersangkutan</th>
+              <th className="border px-4 py-2 text-xs font-bold text-gray-700">Aksi</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {records.map((record) => (
-              <tr key={record.id}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {new Date(record.date).toLocaleDateString('id-ID')}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {record.student_name}
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-900">
-                  <div className="max-w-xs truncate" title={record.activity}>
-                    {record.activity}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {record.location}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {record.service_name}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <div className="flex justify-end space-x-2">
-                    <button
-                      onClick={() => setViewingRecord(record)}
-                      className="text-primary-600 hover:text-primary-900"
-                      title="Lihat Detail"
-                    >
-                      <Eye className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => handlePrint(record)}
-                      className="text-green-600 hover:text-green-900"
-                      title="Cetak"
-                    >
-                      <Printer className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => handleEdit(record)}
-                      className="text-indigo-600 hover:text-indigo-900"
-                      title="Edit"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(record.id)}
-                      className="text-red-600 hover:text-red-900"
-                      title="Hapus"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
+          <tbody>
+            {records.map((record, idx) => (
+              <tr key={record.id} className="hover:bg-gray-50">
+                <td className="border px-4 py-2 text-sm text-center">{idx + 1}</td>
+                <td className="border px-4 py-2 text-sm">{new Date(record.date).toLocaleDateString('id-ID')}</td>
+                <td className="border px-4 py-2 text-sm">{record.activity}</td>
+                <td className="border px-4 py-2 text-sm">{record.location}</td>
+                <td className="border px-4 py-2 text-sm">{record.description}</td>
+                <td className="border px-4 py-2 text-sm">{record.notes}</td>
+                <td className="border px-4 py-2 text-sm">{record.student_name}</td>
+                <td className="border px-4 py-2 text-sm text-center">
+                  <button
+                    onClick={() => setViewingRecord(record)}
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs mr-1"
+                  >
+                    View
+                  </button>
+                  <button
+                    onClick={() => handleEdit(record)}
+                    className="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs mr-1"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(record.id)}
+                    className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs"
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
