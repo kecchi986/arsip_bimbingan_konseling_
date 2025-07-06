@@ -114,75 +114,59 @@ const Services: React.FC = () => {
 
   return (
     <div>
-      <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Layanan Konseling</h1>
-          <p className="text-gray-600">Kelola layanan dan sub layanan konseling</p>
-        </div>
+      {/* Header & Tambah Layanan */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+        <h1 className="text-xl font-bold mb-2 sm:mb-0">Layanan</h1>
         <button
           onClick={openAddModal}
-          className="mt-4 sm:mt-0 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow flex items-center"
         >
-          <Plus className="h-4 w-4 mr-2" />
-          Tambah Layanan
+          <Plus className="h-5 w-5 mr-2" /> Tambah Layanan
         </button>
       </div>
 
       {/* Services List */}
-      <div className="bg-white shadow overflow-hidden sm:rounded-md">
-        <div className="px-4 py-5 sm:p-6">
-          <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-            Daftar Layanan
-          </h3>
-          
+      <div className="bg-white shadow rounded p-6">
+        {/* LAYANAN DASAR */}
+        <div className="mb-6">
+          <div className="font-bold text-gray-700 mb-2">LAYANAN DASAR</div>
           {getParentServices().map((parentService) => (
-            <div key={parentService.id} className="mb-6">
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div>
-                  <h4 className="text-lg font-medium text-gray-900">
-                    {parentService.name}
-                  </h4>
-                  <p className="text-sm text-gray-500">Layanan Utama</p>
-                </div>
+            <div key={parentService.id} className="mb-2 border rounded p-3 bg-gray-50">
+              <div className="flex items-center justify-between">
+                <div className="font-semibold">{parentService.name}</div>
                 <div className="flex space-x-2">
                   <button
                     onClick={() => handleEdit(parentService)}
-                    className="text-indigo-600 hover:text-indigo-900"
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs mr-1"
                   >
-                    <Edit className="h-4 w-4" />
+                    Edit
                   </button>
                   <button
                     onClick={() => handleDelete(parentService.id)}
-                    className="text-red-600 hover:text-red-900"
+                    className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs"
                   >
-                    <Trash2 className="h-4 w-4" />
+                    Delete
                   </button>
                 </div>
               </div>
-              
               {/* Sub Services */}
               {getSubServices(parentService.id).length > 0 && (
-                <div className="ml-6 mt-2 space-y-2">
+                <div className="ml-4 mt-2">
                   {getSubServices(parentService.id).map((subService) => (
-                    <div key={subService.id} className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
-                      <div>
-                        <h5 className="text-sm font-medium text-gray-900">
-                          {subService.name}
-                        </h5>
-                        <p className="text-xs text-gray-500">Sub Layanan</p>
-                      </div>
+                    <div key={subService.id} className="flex items-center justify-between border rounded p-2 mb-1 bg-white">
+                      <div className="text-sm">{subService.name}</div>
                       <div className="flex space-x-2">
                         <button
                           onClick={() => handleEdit(subService)}
-                          className="text-indigo-600 hover:text-indigo-900"
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs mr-1"
                         >
-                          <Edit className="h-4 w-4" />
+                          Edit
                         </button>
                         <button
                           onClick={() => handleDelete(subService.id)}
-                          className="text-red-600 hover:text-red-900"
+                          className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs"
                         >
-                          <Trash2 className="h-4 w-4" />
+                          Delete
                         </button>
                       </div>
                     </div>
@@ -191,13 +175,17 @@ const Services: React.FC = () => {
               )}
             </div>
           ))}
-          
-          {getParentServices().length === 0 && (
-            <p className="text-gray-500 text-center py-8">
-              Belum ada layanan yang ditambahkan
-            </p>
-          )}
         </div>
+        {/* LAYANAN RESPONSIF (dummy, bisa disesuaikan filter/label sesuai kebutuhan) */}
+        {/* <div className="mb-6">
+          <div className="font-bold text-gray-700 mb-2">LAYANAN RESPONSIF</div>
+          ...
+        </div> */}
+        {getParentServices().length === 0 && (
+          <p className="text-gray-500 text-center py-8">
+            Belum ada layanan yang ditambahkan
+          </p>
+        )}
       </div>
 
       {/* Add/Edit Modal */}
