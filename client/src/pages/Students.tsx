@@ -286,46 +286,38 @@ const Students: React.FC = () => {
       {/* View Modal */}
       {viewingStudent && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <div className="mt-3">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-medium text-gray-900">Detail Siswa</h3>
+          <div className="relative top-20 mx-auto p-0 w-full max-w-md">
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+              <div className="flex flex-col items-center p-6 border-b">
+                <div className="bg-blue-100 text-blue-700 rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mb-2">
+                  {viewingStudent.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                </div>
+                <div className="text-lg font-semibold mb-1">{viewingStudent.name}</div>
+                <div className="text-sm text-gray-500">NIS: {viewingStudent.nis}</div>
+              </div>
+              <div className="p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-500 text-sm">Tingkat</span>
+                  <span className="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full">{viewingStudent.grade}</span>
+                </div>
+                <hr />
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-500 text-sm">Jurusan</span>
+                  <span className="inline-block bg-green-50 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">{viewingStudent.major}</span>
+                </div>
+                <hr />
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-500 text-sm">Ruangan</span>
+                  <span className="text-gray-900 font-medium">{viewingStudent.room}</span>
+                </div>
+              </div>
+              <div className="flex justify-end p-4 border-t">
                 <button
                   onClick={() => setViewingStudent(null)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
                 >
-                  <X className="h-6 w-6" />
+                  Tutup
                 </button>
-              </div>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">NIS</label>
-                  <p className="mt-1 text-sm text-gray-900">{viewingStudent.nis}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Nama</label>
-                  <p className="mt-1 text-sm text-gray-900">{viewingStudent.name}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Tingkat</label>
-                  <p className="mt-1 text-sm text-gray-900">{viewingStudent.grade}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Jurusan</label>
-                  <p className="mt-1 text-sm text-gray-900">{viewingStudent.major}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Ruangan</label>
-                  <p className="mt-1 text-sm text-gray-900">{viewingStudent.room}</p>
-                </div>
-                <div className="flex justify-end pt-4">
-                  <button
-                    onClick={() => setViewingStudent(null)}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-                  >
-                    Tutup
-                  </button>
-                </div>
               </div>
             </div>
           </div>
