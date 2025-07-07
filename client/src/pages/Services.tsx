@@ -41,7 +41,7 @@ const Services: React.FC = () => {
     try {
       const data = {
         name: formData.name,
-        parent_id: formData.parent_id ? parseInt(formData.parent_id) : null,
+        parent_id: formData.parent_id !== '' ? parseInt(formData.parent_id) : null,
       };
 
       if (editingService) {
@@ -97,7 +97,7 @@ const Services: React.FC = () => {
   };
 
   const getParentServices = () => {
-    return services.filter(service => !service.parent_id);
+    return services.filter(service => service.parent_id === null);
   };
 
   const getSubServices = (parentId: number) => {
@@ -223,11 +223,13 @@ const Services: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, parent_id: e.target.value })}
                   >
                     <option value="">Pilih layanan induk (untuk sub layanan)</option>
-                    {getParentServices().map((service) => (
-                      <option key={service.id} value={service.id}>
-                        {service.name}
-                      </option>
-                    ))}
+                    {getParentServices()
+                      .filter(service => !editingService || service.id !== editingService.id)
+                      .map((service) => (
+                        <option key={service.id} value={service.id}>
+                          {service.name}
+                        </option>
+                      ))}
                   </select>
                 </div>
                 <div className="flex justify-end space-x-3 pt-4">
