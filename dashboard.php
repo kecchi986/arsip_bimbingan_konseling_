@@ -22,15 +22,25 @@ $result = mysqli_query($conn, $sql);
             padding: 32px 40px 40px 40px;
         }
         .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        .dashboard-title {
             font-size: 1.5em;
             font-weight: bold;
             color: #2c3e50;
+            margin-bottom: 18px;
+        }
+        .table-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .toolbar-left {
+            display: flex;
+            gap: 8px;
+        }
+        .toolbar-right {
+            display: flex;
+            gap: 8px;
+            align-items: center;
         }
         .btn-add {
             background: #1976d2;
@@ -42,11 +52,25 @@ $result = mysqli_query($conn, $sql);
             text-decoration: none;
             font-size: 1em;
         }
-        .table-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
+        .btn-nav {
+            background: #888;
+            color: #fff;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1em;
+        }
+        .btn-logout {
+            background: #e53935;
+            color: #fff;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1em;
         }
         .search-box {
             padding: 6px 12px;
@@ -103,8 +127,9 @@ $result = mysqli_query($conn, $sql);
         }
         @media (max-width: 700px) {
             .container { padding: 12px; }
-            .dashboard-header { flex-direction: column; align-items: flex-start; gap: 12px; }
             .table-toolbar { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .toolbar-left { flex-direction: column; gap: 8px; }
+            .toolbar-right { flex-direction: column; gap: 8px; }
         }
     </style>
     <script>
@@ -129,12 +154,17 @@ $result = mysqli_query($conn, $sql);
 </head>
 <body>
     <div class="container">
-        <div class="dashboard-header">
-            <div class="dashboard-title">Bimbingan</div>
-        </div>
+        <div class="dashboard-header">Bimbingan</div>
         <div class="table-toolbar">
-            <a href="bimbingan_add.php" class="btn-add">Tambah Bimbingan</a>
-            <input type="text" id="searchInput" class="search-box" onkeyup="filterTable()" placeholder="Search dengan isi atau nama siswa...">
+            <div class="toolbar-left">
+                <a href="siswa.php" class="btn-nav">Siswa</a>
+                <a href="layanan.php" class="btn-nav">Layanan</a>
+                <a href="bimbingan_add.php" class="btn-add">Tambah Bimbingan</a>
+            </div>
+            <div class="toolbar-right">
+                <input type="text" id="searchInput" class="search-box" onkeyup="filterTable()" placeholder="Search dengan isi atau nama siswa...">
+                <a href="logout.php" class="btn-logout">Logout</a>
+            </div>
         </div>
         <div class="table-responsive">
         <table id="bimbinganTable">
