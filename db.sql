@@ -41,5 +41,6 @@ CREATE TABLE bimbingan (
     FOREIGN KEY (siswa_id) REFERENCES siswa(id) ON DELETE CASCADE
 );
 
--- Insert user admin default (password: admin12345)
-INSERT INTO user (email, password) VALUES ('admin@admin.com', '$2y$10$j7zCXkKkw2TZgoVVzFgFOOs.AVAQBSPdrEMZjsC5bXkO0/qfEEWYi'); 
+-- Insert user admin default (email: admin@admin.com, password: admin123)
+INSERT INTO user (email, password) VALUES 
+('admin@admin.com', '$2y$10$j7zCXkKkw2TZgoVVzFgFOOs.AVAQBSPdrEMZjsC5bXkO0/qfEEWYi'); 
