@@ -3,20 +3,16 @@ require 'config.php';
 require 'functions.php';
 require_login();
 
-$layanan = mysqli_query($conn, "SELECT * FROM layanan ORDER BY id");
-$sub = [];
-$subq = mysqli_query($conn, "SELECT * FROM sublayanan ORDER BY layanan_id");
-while($row = mysqli_fetch_assoc($subq)) {
-    $sub[$row['layanan_id']][] = $row;
-}
-// Info admin
+// Query data bimbingan + siswa
+$sql = "SELECT b.*, s.nama as nama_siswa FROM bimbingan b LEFT JOIN siswa s ON b.siswa_id = s.id ORDER BY b.tanggal DESC";
+$result = mysqli_query($conn, $sql);
 $email = isset($_SESSION['user_email']) ? $_SESSION['user_email'] : 'admin@school.com';
-$page = 'layanan';
+$page = 'bimbingan';
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Layanan - Arsip Bimbingan Konseling</title>
+    <title>Rekaman Konseling - Arsip Bimbingan Konseling</title>
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
     <style>
@@ -38,25 +34,24 @@ $page = 'layanan';
         .btn-logout { background: #e53935; color: #fff; border: none; padding: 8px 0; border-radius: 6px; width: 100%; font-size: 1em; font-weight: 500; cursor: pointer; text-align: center; text-decoration: none; display: block; margin-top: 8px; transition: background 0.2s; }
         .btn-logout:hover { background: #b71c1c; }
         .main { flex: 1; padding: 0 0 0 0; min-width: 0; }
-        .main-content { max-width: 900px; margin: 0 auto; padding: 48px 32px 32px 32px; }
+        .main-content { max-width: 1100px; margin: 0 auto; padding: 48px 32px 32px 32px; }
         .main-content h1 { font-size: 2em; font-weight: bold; margin-bottom: 8px; color: #222; }
-        .main-content .subtitle { color: #555; margin-bottom: 32px; font-size: 1.1em; }
-        .layanan-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+        .table-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
         .btn-add { background: #1976d2; color: #fff; border: none; padding: 10px 24px; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 1em; font-weight: 500; transition: background 0.2s; }
         .btn-add:hover { background: #1251a3; }
-        .layanan-block { background: #f9f9f9; border: 1px solid #eee; border-radius: 8px; margin-bottom: 18px; padding: 18px 20px 12px 20px; }
-        .layanan-block-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-        .layanan-block-title { font-weight: bold; font-size: 1.1em; color: #333; }
-        .layanan-block-actions { display: flex; gap: 6px; }
-        .btn-edit { background: #ff9800; color: #fff; border: none; padding: 6px 16px; border-radius: 6px; font-size: 0.97em; text-decoration: none; transition: background 0.2s; }
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; background: #fff; }
+        th, td { padding: 13px 14px; text-align: left; }
+        th { background: #e3eaf6; color: #1976d2; font-weight: bold; border-bottom: 2px solid #d0d7e6; }
+        tr { transition: background 0.15s; }
+        tr:hover { background: #f0f6ff; }
+        tr:nth-child(even) { background: #f8fafc; }
+        .btn-view { background: #1976d2; color: #fff; border: none; padding: 6px 16px; border-radius: 6px; font-size: 0.97em; margin-right: 2px; text-decoration: none; transition: background 0.2s; }
+        .btn-view:hover { background: #1251a3; }
+        .btn-edit { background: #ff9800; color: #fff; border: none; padding: 6px 16px; border-radius: 6px; font-size: 0.97em; margin-right: 2px; text-decoration: none; transition: background 0.2s; }
         .btn-edit:hover { background: #c66900; }
         .btn-delete { background: #e53935; color: #fff; border: none; padding: 6px 16px; border-radius: 6px; font-size: 0.97em; text-decoration: none; transition: background 0.2s; }
         .btn-delete:hover { background: #b71c1c; }
-        .btn-sub { background: #1976d2; color: #fff; border: none; padding: 6px 16px; border-radius: 6px; font-size: 0.97em; text-decoration: none; transition: background 0.2s; }
-        .btn-sub:hover { background: #1251a3; }
-        .sub-list { list-style: none; padding-left: 0; margin: 0 0 0 10px; }
-        .sub-list li { margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
-        .sub-actions { display: inline-flex; gap: 4px; margin-left: 8px; }
         @media (max-width: 900px) { .main-content { padding: 32px 8px; } }
         @media (max-width: 700px) { .sidebar { width: 100px; } .sidebar-header, .sidebar-footer { padding-left: 10px; padding-right: 10px; } .sidebar-menu a { padding: 12px 10px; font-size: 0.95em; } .main-content { padding: 18px 2px; } }
     </style>
@@ -89,33 +84,40 @@ $page = 'layanan';
     </div>
     <div class="main">
         <div class="main-content">
-            <div class="layanan-header">
-                <h1>Layanan</h1>
-                <a href="layanan_add.php" class="btn-add"><i class="fa fa-plus"></i> Tambah Layanan</a>
+            <div class="table-header-row">
+                <h1>Rekaman Konseling</h1>
+                <a href="bimbingan_add.php" class="btn-add"><i class="fa fa-plus"></i> Tambah Rekaman</a>
             </div>
-            <?php while($l = mysqli_fetch_assoc($layanan)): ?>
-                <div class="layanan-block">
-                    <div class="layanan-block-header">
-                        <span class="layanan-block-title"><?= esc($l['nama']) ?></span>
-                        <span class="layanan-block-actions">
-                            <a href="layanan_edit.php?id=<?= $l['id'] ?>" class="btn-edit">Edit</a>
-                            <a href="layanan_delete.php?id=<?= $l['id'] ?>" class="btn-delete" onclick="return confirm('Hapus layanan ini?')">Delete</a>
-                            <a href="sublayanan_add.php?layanan_id=<?= $l['id'] ?>" class="btn-sub">Tambah Sub Layanan</a>
-                        </span>
-                    </div>
-                    <ul class="sub-list">
-                        <?php if(isset($sub[$l['id']])): foreach($sub[$l['id']] as $s): ?>
-                            <li>
-                                <?= esc($s['nama']) ?>
-                                <span class="sub-actions">
-                                    <a href="sublayanan_edit.php?id=<?= $s['id'] ?>" class="btn-edit">Edit</a>
-                                    <a href="sublayanan_delete.php?id=<?= $s['id'] ?>" class="btn-delete" onclick="return confirm('Hapus sub layanan ini?')">Delete</a>
-                                </span>
-                            </li>
-                        <?php endforeach; endif; ?>
-                    </ul>
-                </div>
-            <?php endwhile; ?>
+            <div class="table-responsive">
+            <table>
+                <tr>
+                    <th>No</th>
+                    <th>Tanggal</th>
+                    <th>Kegiatan</th>
+                    <th>Tempat</th>
+                    <th>Uraian</th>
+                    <th>Keterangan</th>
+                    <th>Siswa yang bersangkutan</th>
+                    <th>Aksi</th>
+                </tr>
+                <?php $no=1; while($row = mysqli_fetch_assoc($result)): ?>
+                <tr>
+                    <td><?= $no++ ?></td>
+                    <td><?= esc($row['tanggal']) ?></td>
+                    <td><?= esc($row['kegiatan']) ?></td>
+                    <td><?= esc($row['tempat']) ?></td>
+                    <td><?= esc($row['uraian']) ?></td>
+                    <td><?= esc($row['keterangan']) ?></td>
+                    <td><?= esc($row['nama_siswa']) ?></td>
+                    <td>
+                        <a href="bimbingan_view.php?id=<?= $row['id'] ?>" class="btn-view">View</a>
+                        <a href="bimbingan_edit.php?id=<?= $row['id'] ?>" class="btn-edit">Edit</a>
+                        <a href="bimbingan_delete.php?id=<?= $row['id'] ?>" class="btn-delete" onclick="return confirm('Hapus data ini?')">Delete</a>
+                    </td>
+                </tr>
+                <?php endwhile; ?>
+            </table>
+            </div>
         </div>
     </div>
 </div>

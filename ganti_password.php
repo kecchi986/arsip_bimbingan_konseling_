@@ -3,20 +3,32 @@ require 'config.php';
 require 'functions.php';
 require_login();
 
-$layanan = mysqli_query($conn, "SELECT * FROM layanan ORDER BY id");
-$sub = [];
-$subq = mysqli_query($conn, "SELECT * FROM sublayanan ORDER BY layanan_id");
-while($row = mysqli_fetch_assoc($subq)) {
-    $sub[$row['layanan_id']][] = $row;
+$error = '';
+$success = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $old = $_POST['old_password'];
+    $new = $_POST['new_password'];
+    $new2 = $_POST['new_password2'];
+    $user_id = $_SESSION['user_id'];
+    $q = mysqli_query($conn, "SELECT password FROM user WHERE id=$user_id");
+    $row = mysqli_fetch_assoc($q);
+    if (!password_verify($old, $row['password'])) {
+        $error = 'Password lama salah!';
+    } elseif ($new !== $new2) {
+        $error = 'Konfirmasi password baru tidak sama!';
+    } else {
+        $hash = password_hash($new, PASSWORD_DEFAULT);
+        mysqli_query($conn, "UPDATE user SET password='$hash' WHERE id=$user_id");
+        $success = 'Password berhasil diubah!';
+    }
 }
-// Info admin
 $email = isset($_SESSION['user_email']) ? $_SESSION['user_email'] : 'admin@school.com';
-$page = 'layanan';
+$page = 'password';
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Layanan - Arsip Bimbingan Konseling</title>
+    <title>Ganti Password - Arsip Bimbingan Konseling</title>
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
     <style>
@@ -38,25 +50,18 @@ $page = 'layanan';
         .btn-logout { background: #e53935; color: #fff; border: none; padding: 8px 0; border-radius: 6px; width: 100%; font-size: 1em; font-weight: 500; cursor: pointer; text-align: center; text-decoration: none; display: block; margin-top: 8px; transition: background 0.2s; }
         .btn-logout:hover { background: #b71c1c; }
         .main { flex: 1; padding: 0 0 0 0; min-width: 0; }
-        .main-content { max-width: 900px; margin: 0 auto; padding: 48px 32px 32px 32px; }
+        .main-content { max-width: 500px; margin: 0 auto; padding: 48px 32px 32px 32px; }
         .main-content h1 { font-size: 2em; font-weight: bold; margin-bottom: 8px; color: #222; }
-        .main-content .subtitle { color: #555; margin-bottom: 32px; font-size: 1.1em; }
-        .layanan-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
-        .btn-add { background: #1976d2; color: #fff; border: none; padding: 10px 24px; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 1em; font-weight: 500; transition: background 0.2s; }
-        .btn-add:hover { background: #1251a3; }
-        .layanan-block { background: #f9f9f9; border: 1px solid #eee; border-radius: 8px; margin-bottom: 18px; padding: 18px 20px 12px 20px; }
-        .layanan-block-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-        .layanan-block-title { font-weight: bold; font-size: 1.1em; color: #333; }
-        .layanan-block-actions { display: flex; gap: 6px; }
-        .btn-edit { background: #ff9800; color: #fff; border: none; padding: 6px 16px; border-radius: 6px; font-size: 0.97em; text-decoration: none; transition: background 0.2s; }
-        .btn-edit:hover { background: #c66900; }
-        .btn-delete { background: #e53935; color: #fff; border: none; padding: 6px 16px; border-radius: 6px; font-size: 0.97em; text-decoration: none; transition: background 0.2s; }
-        .btn-delete:hover { background: #b71c1c; }
-        .btn-sub { background: #1976d2; color: #fff; border: none; padding: 6px 16px; border-radius: 6px; font-size: 0.97em; text-decoration: none; transition: background 0.2s; }
-        .btn-sub:hover { background: #1251a3; }
-        .sub-list { list-style: none; padding-left: 0; margin: 0 0 0 10px; }
-        .sub-list li { margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
-        .sub-actions { display: inline-flex; gap: 4px; margin-left: 8px; }
+        .form-container { background: #fff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 32px 32px 24px 32px; }
+        .form-table { width: 100%; border-collapse: collapse; }
+        .form-table td { padding: 10px 6px; vertical-align: top; }
+        .form-table label { font-weight: normal; color: #333; }
+        .form-actions { text-align: right; padding-top: 18px; }
+        .btn-simpan { background: #1976d2; color: #fff; border: none; padding: 7px 22px; border-radius: 4px; font-size: 1em; margin-left: 8px; }
+        .btn-batal { background: #e53935; color: #fff; border: none; padding: 7px 22px; border-radius: 4px; font-size: 1em; }
+        input[type="password"] { width: 100%; padding: 7px; border: 1px solid #ccc; border-radius: 4px; }
+        .error { background: #e57373; color: #fff; padding: 8px; border-radius: 4px; margin-bottom: 12px; }
+        .success { background: #43a047; color: #fff; padding: 8px; border-radius: 4px; margin-bottom: 12px; }
         @media (max-width: 900px) { .main-content { padding: 32px 8px; } }
         @media (max-width: 700px) { .sidebar { width: 100px; } .sidebar-header, .sidebar-footer { padding-left: 10px; padding-right: 10px; } .sidebar-menu a { padding: 12px 10px; font-size: 0.95em; } .main-content { padding: 18px 2px; } }
     </style>
@@ -89,33 +94,31 @@ $page = 'layanan';
     </div>
     <div class="main">
         <div class="main-content">
-            <div class="layanan-header">
-                <h1>Layanan</h1>
-                <a href="layanan_add.php" class="btn-add"><i class="fa fa-plus"></i> Tambah Layanan</a>
-            </div>
-            <?php while($l = mysqli_fetch_assoc($layanan)): ?>
-                <div class="layanan-block">
-                    <div class="layanan-block-header">
-                        <span class="layanan-block-title"><?= esc($l['nama']) ?></span>
-                        <span class="layanan-block-actions">
-                            <a href="layanan_edit.php?id=<?= $l['id'] ?>" class="btn-edit">Edit</a>
-                            <a href="layanan_delete.php?id=<?= $l['id'] ?>" class="btn-delete" onclick="return confirm('Hapus layanan ini?')">Delete</a>
-                            <a href="sublayanan_add.php?layanan_id=<?= $l['id'] ?>" class="btn-sub">Tambah Sub Layanan</a>
-                        </span>
+            <h1>Ganti Password</h1>
+            <div class="form-container">
+                <?php if ($error): ?><div class="error"> <?= esc($error) ?> </div><?php endif; ?>
+                <?php if ($success): ?><div class="success"> <?= esc($success) ?> </div><?php endif; ?>
+                <form method="post">
+                    <table class="form-table">
+                        <tr>
+                            <td style="width:180px;"><label>Password Lama</label></td>
+                            <td><input type="password" name="old_password" required></td>
+                        </tr>
+                        <tr>
+                            <td><label>Password Baru</label></td>
+                            <td><input type="password" name="new_password" required></td>
+                        </tr>
+                        <tr>
+                            <td><label>Konfirmasi Password Baru</label></td>
+                            <td><input type="password" name="new_password2" required></td>
+                        </tr>
+                    </table>
+                    <div class="form-actions">
+                        <a href="dashboard.php" class="btn-batal">Batal</a>
+                        <button type="submit" class="btn-simpan">Simpan</button>
                     </div>
-                    <ul class="sub-list">
-                        <?php if(isset($sub[$l['id']])): foreach($sub[$l['id']] as $s): ?>
-                            <li>
-                                <?= esc($s['nama']) ?>
-                                <span class="sub-actions">
-                                    <a href="sublayanan_edit.php?id=<?= $s['id'] ?>" class="btn-edit">Edit</a>
-                                    <a href="sublayanan_delete.php?id=<?= $s['id'] ?>" class="btn-delete" onclick="return confirm('Hapus sub layanan ini?')">Delete</a>
-                                </span>
-                            </li>
-                        <?php endforeach; endif; ?>
-                    </ul>
-                </div>
-            <?php endwhile; ?>
+                </form>
+            </div>
         </div>
     </div>
 </div>
