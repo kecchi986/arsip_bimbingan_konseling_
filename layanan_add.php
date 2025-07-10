@@ -1,0 +1,27 @@
+<?php
+require 'config.php';
+require 'functions.php';
+require_login();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nama = mysqli_real_escape_string($conn, $_POST['nama']);
+    mysqli_query($conn, "INSERT INTO layanan (nama) VALUES ('$nama')");
+    redirect('layanan.php');
+}
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tambah Layanan</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <h2>Tambah Layanan</h2>
+    <form method="post">
+        <label>Nama Layanan</label><br>
+        <input type="text" name="nama" required><br><br>
+        <button type="submit">Simpan</button>
+        <a href="layanan.php" class="btn">Batal</a>
+    </form>
+</body>
+</html> 
