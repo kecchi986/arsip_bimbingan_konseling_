@@ -69,7 +69,4 @@ Jika belum ada user, silakan registrasi terlebih dahulu. Jika sudah ada, gunakan
 Pull request dan saran sangat terbuka untuk pengembangan lebih lanjut.
 
 ## Lisensi
-Aplikasi ini bersifat open source dan dapat digunakan sesuai kebutuhan.
-
-## Kontak
-Untuk pertanyaan atau saran, silakan hubungi pengembang melalui email: [your.email@example.com](mailto:your.email@example.com) 
+Aplikasi ini bersifat open source dan dapat digunakan sesuai kebutuhan. 
