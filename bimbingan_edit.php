@@ -2,6 +2,9 @@
 require 'config.php';
 require 'functions.php';
 require_login();
+if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+    redirect('bimbingan_list.php');
+}
 
 $id = (int)($_GET['id'] ?? 0);
 $sql = "SELECT * FROM bimbingan WHERE id=$id";

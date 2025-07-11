@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = 'Email sudah terdaftar!';
         } else {
             $hash = password_hash($password, PASSWORD_DEFAULT);
-            mysqli_query($conn, "INSERT INTO user (email, password) VALUES ('$email', '$hash')");
+            mysqli_query($conn, "INSERT INTO user (email, password, role) VALUES ('$email', '$hash', 'user')");
             $success = 'Registrasi berhasil! Silakan login.';
             header('Location: index.php?register=success');
             exit;

@@ -7,6 +7,7 @@ $siswa = mysqli_query($conn, "SELECT * FROM siswa ORDER BY nama");
 // Info admin
 $email = isset($_SESSION['user_email']) ? $_SESSION['user_email'] : 'admin@school.com';
 $page = 'siswa';
+$is_admin = isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
 ?>
 <!DOCTYPE html>
 <html>
@@ -85,35 +86,47 @@ $page = 'siswa';
     </div>
     <div class="main">
         <div class="main-content">
-            <div class="table-header-row">
+            <div class="siswa-header" style="display:flex;justify-content:space-between;align-items:center;">
                 <h1>Data Siswa</h1>
+                <?php if($is_admin): ?>
                 <a href="siswa_add.php" class="btn-add"><i class="fa fa-plus"></i> Tambah Siswa</a>
+                <?php endif; ?>
             </div>
             <div class="table-responsive">
-            <table>
-                <tr>
-                    <th>NIS</th>
-                    <th>Nama</th>
-                    <th>Tingkat</th>
-                    <th>Jurusan</th>
-                    <th>Ruangan</th>
-                    <th>Aksi</th>
-                </tr>
-                <?php while($row = mysqli_fetch_assoc($siswa)): ?>
-                <tr>
-                    <td><?= esc($row['nis']) ?></td>
-                    <td><?= esc($row['nama']) ?></td>
-                    <td><?= esc($row['tingkat']) ?></td>
-                    <td><?= esc($row['jurusan']) ?></td>
-                    <td><?= esc($row['ruangan']) ?></td>
-                    <td>
-                        <a href="siswa_view.php?id=<?= $row['id'] ?>" class="btn-view">View</a>
-                        <a href="siswa_edit.php?id=<?= $row['id'] ?>" class="btn-edit">Edit</a>
-                        <a href="siswa_delete.php?id=<?= $row['id'] ?>" class="btn-delete" onclick="return confirm('Hapus data ini?')">Delete</a>
-                    </td>
-                </tr>
-                <?php endwhile; ?>
-            </table>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>NIS</th>
+                            <th>Nama</th>
+                            <th>Tingkat</th>
+                            <th>Jurusan</th>
+                            <th>Ruangan</th>
+                            <?php if($is_admin): ?><th>Aksi</th><?php endif; ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $no=1; while($row = mysqli_fetch_assoc($siswa)): ?>
+                        <tr>
+                            <td><?= $no++ ?></td>
+                            <td><?= esc($row['nis']) ?></td>
+                            <td><?= esc($row['nama']) ?></td>
+                            <td><?= esc($row['tingkat']) ?></td>
+                            <td><?= esc($row['jurusan']) ?></td>
+                            <td><?= esc($row['ruangan']) ?></td>
+                            <?php if($is_admin): ?>
+                            <td>
+                                <a href="siswa_view.php?id=<?= $row['id'] ?>" class="btn-view">View</a>
+                                <a href="siswa_edit.php?id=<?= $row['id'] ?>" class="btn-edit">Edit</a>
+                                <a href="siswa_delete.php?id=<?= $row['id'] ?>" class="btn-delete" onclick="return confirm('Hapus siswa ini?')">Delete</a>
+                            </td>
+                            <?php else: ?>
+                            <td><a href="siswa_view.php?id=<?= $row['id'] ?>" class="btn-view">View</a></td>
+                            <?php endif; ?>
+                        </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

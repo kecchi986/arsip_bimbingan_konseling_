@@ -8,6 +8,7 @@ $sql = "SELECT b.*, s.nama as nama_siswa FROM bimbingan b LEFT JOIN siswa s ON b
 $result = mysqli_query($conn, $sql);
 $email = isset($_SESSION['user_email']) ? $_SESSION['user_email'] : 'admin@school.com';
 $page = 'bimbingan';
+$is_admin = isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
 ?>
 <!DOCTYPE html>
 <html>
@@ -84,39 +85,49 @@ $page = 'bimbingan';
     </div>
     <div class="main">
         <div class="main-content">
-            <div class="table-header-row">
+            <div class="bimbingan-header" style="display:flex;justify-content:space-between;align-items:center;">
                 <h1>Rekaman Konseling</h1>
+                <?php if($is_admin): ?>
                 <a href="bimbingan_add.php" class="btn-add"><i class="fa fa-plus"></i> Tambah Rekaman</a>
+                <?php endif; ?>
             </div>
             <div class="table-responsive">
-            <table>
-                <tr>
-                    <th>No</th>
-                    <th>Tanggal</th>
-                    <th>Kegiatan</th>
-                    <th>Tempat</th>
-                    <th>Uraian</th>
-                    <th>Keterangan</th>
-                    <th>Siswa yang bersangkutan</th>
-                    <th>Aksi</th>
-                </tr>
-                <?php $no=1; while($row = mysqli_fetch_assoc($result)): ?>
-                <tr>
-                    <td><?= $no++ ?></td>
-                    <td><?= esc($row['tanggal']) ?></td>
-                    <td><?= esc($row['kegiatan']) ?></td>
-                    <td><?= esc($row['tempat']) ?></td>
-                    <td><?= esc($row['uraian']) ?></td>
-                    <td><?= esc($row['keterangan']) ?></td>
-                    <td><?= esc($row['nama_siswa']) ?></td>
-                    <td>
-                        <a href="bimbingan_view.php?id=<?= $row['id'] ?>" class="btn-view">View</a>
-                        <a href="bimbingan_edit.php?id=<?= $row['id'] ?>" class="btn-edit">Edit</a>
-                        <a href="bimbingan_delete.php?id=<?= $row['id'] ?>" class="btn-delete" onclick="return confirm('Hapus data ini?')">Delete</a>
-                    </td>
-                </tr>
-                <?php endwhile; ?>
-            </table>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Tanggal</th>
+                            <th>Nama Siswa</th>
+                            <th>Kegiatan</th>
+                            <th>Tempat</th>
+                            <th>Uraian</th>
+                            <th>Keterangan</th>
+                            <?php if($is_admin): ?><th>Aksi</th><?php endif; ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $no=1; while($row = mysqli_fetch_assoc($result)): ?>
+                        <tr>
+                            <td><?= $no++ ?></td>
+                            <td><?= esc($row['tanggal']) ?></td>
+                            <td><?= esc($row['nama_siswa']) ?></td>
+                            <td><?= esc($row['kegiatan']) ?></td>
+                            <td><?= esc($row['tempat']) ?></td>
+                            <td><?= esc($row['uraian']) ?></td>
+                            <td><?= esc($row['keterangan']) ?></td>
+                            <?php if($is_admin): ?>
+                            <td>
+                                <a href="bimbingan_view.php?id=<?= $row['id'] ?>" class="btn-view">View</a>
+                                <a href="bimbingan_edit.php?id=<?= $row['id'] ?>" class="btn-edit">Edit</a>
+                                <a href="bimbingan_delete.php?id=<?= $row['id'] ?>" class="btn-delete" onclick="return confirm('Hapus rekaman ini?')">Delete</a>
+                            </td>
+                            <?php else: ?>
+                            <td><a href="bimbingan_view.php?id=<?= $row['id'] ?>" class="btn-view">View</a></td>
+                            <?php endif; ?>
+                        </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

@@ -12,6 +12,7 @@ while($row = mysqli_fetch_assoc($subq)) {
 // Info admin
 $email = isset($_SESSION['user_email']) ? $_SESSION['user_email'] : 'admin@school.com';
 $page = 'layanan';
+$is_admin = isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
 ?>
 <!DOCTYPE html>
 <html>
@@ -56,7 +57,7 @@ $page = 'layanan';
         .btn-sub:hover { background: #1251a3; }
         .sub-list { list-style: none; padding-left: 0; margin: 0 0 0 10px; }
         .sub-list li { margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
-        .sub-actions { display: inline-flex; gap: 4px; margin-left: 8px; }
+        .sub-actions { display: flex; gap: 4px; margin-left: auto; }
         @media (max-width: 900px) { .main-content { padding: 32px 8px; } }
         @media (max-width: 700px) { .sidebar { width: 100px; } .sidebar-header, .sidebar-footer { padding-left: 10px; padding-right: 10px; } .sidebar-menu a { padding: 12px 10px; font-size: 0.95em; } .main-content { padding: 18px 2px; } }
     </style>
@@ -91,16 +92,20 @@ $page = 'layanan';
         <div class="main-content">
             <div class="layanan-header">
                 <h1>Layanan</h1>
+                <?php if($is_admin): ?>
                 <a href="layanan_add.php" class="btn-add"><i class="fa fa-plus"></i> Tambah Layanan</a>
+                <?php endif; ?>
             </div>
             <?php while($l = mysqli_fetch_assoc($layanan)): ?>
                 <div class="layanan-block">
                     <div class="layanan-block-header">
                         <span class="layanan-block-title"><?= esc($l['nama']) ?></span>
                         <span class="layanan-block-actions">
-                            <a href="layanan_edit.php?id=<?= $l['id'] ?>" class="btn-edit">Edit</a>
-                            <a href="layanan_delete.php?id=<?= $l['id'] ?>" class="btn-delete" onclick="return confirm('Hapus layanan ini?')">Delete</a>
-                            <a href="sublayanan_add.php?layanan_id=<?= $l['id'] ?>" class="btn-sub">Tambah Sub Layanan</a>
+                            <?php if($is_admin): ?>
+                                <a href="layanan_edit.php?id=<?= $l['id'] ?>" class="btn-edit">Edit</a>
+                                <a href="layanan_delete.php?id=<?= $l['id'] ?>" class="btn-delete" onclick="return confirm('Hapus layanan ini?')">Delete</a>
+                                <a href="sublayanan_add.php?layanan_id=<?= $l['id'] ?>" class="btn-sub">Tambah Sub Layanan</a>
+                            <?php endif; ?>
                         </span>
                     </div>
                     <ul class="sub-list">
@@ -108,8 +113,10 @@ $page = 'layanan';
                             <li>
                                 <?= esc($s['nama']) ?>
                                 <span class="sub-actions">
-                                    <a href="sublayanan_edit.php?id=<?= $s['id'] ?>" class="btn-edit">Edit</a>
-                                    <a href="sublayanan_delete.php?id=<?= $s['id'] ?>" class="btn-delete" onclick="return confirm('Hapus sub layanan ini?')">Delete</a>
+                                    <?php if($is_admin): ?>
+                                        <a href="sublayanan_edit.php?id=<?= $s['id'] ?>" class="btn-edit">Edit</a>
+                                        <a href="sublayanan_delete.php?id=<?= $s['id'] ?>" class="btn-delete" onclick="return confirm('Hapus sub layanan ini?')">Delete</a>
+                                    <?php endif; ?>
                                 </span>
                             </li>
                         <?php endforeach; endif; ?>

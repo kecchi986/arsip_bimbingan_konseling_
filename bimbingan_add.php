@@ -2,6 +2,9 @@
 require 'config.php';
 require 'functions.php';
 require_login();
+if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+    redirect('bimbingan_list.php');
+}
 
 // Ambil data siswa untuk dropdown
 $siswa = mysqli_query($conn, "SELECT id, nama FROM siswa ORDER BY nama");

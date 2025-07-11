@@ -2,6 +2,9 @@
 require 'config.php';
 require 'functions.php';
 require_login();
+if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+    redirect('layanan.php');
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nama = mysqli_real_escape_string($conn, $_POST['nama']);
